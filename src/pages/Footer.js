@@ -5,7 +5,7 @@ export default function Main() {
     return (
         <Footer>
             <FooterContent>
-                <Name>Sort Visualizer</Name>
+                <Name>Sort & Search Visualizer</Name>
             </FooterContent>
             <FooterContent>
                 <InnerContent>
