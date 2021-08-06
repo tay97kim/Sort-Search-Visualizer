@@ -29,11 +29,17 @@ export default function Main({ data, currentIdx, nextIdx }) {
 
 }
 
+const Tmp = styled.div`
+    position: relative;
+    display: flex;
+
+`
+
 const Container = styled.div`
     position: relative;
     display: flex;
     flex-direction: row;
-    width: 88%;
+    width: 85%;
     height: 220px;
     justify-content: space-evenly;
     margin-left: 50px;
