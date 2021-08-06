@@ -90,6 +90,39 @@ export const SpeedContainer = styled.div`
     margin-left: 20px;
 `
 
+export const SpanWrapper = styled.div`
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+    margin-top:20px;
+    line-height: 30%;
+`
+
+export const CheckBox = styled.div`
+    margin-top:12px;
+    zoom:1.5;
+
+    div[class="sidebar"]{
+        width:90px;
+        height: 60%;
+        background:#D6D4D2;
+        position:fixed;
+        top:150px;
+        right:-90px;
+        z-index:1;
+        transition: all .35s;
+        font-size: 11px;
+        word-break:keep-all;
+        overflow:auto;
+        line-height: 140%;
+    }
+    input[id="searchHistory"]:checked+label+div{
+        right:0;
+        Container-width:78%;
+    }
+`
+
 export const CountContainer = styled.div`
     font-size: 20px;
     font-weight: bold;
