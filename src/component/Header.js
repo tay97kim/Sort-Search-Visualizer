@@ -2,7 +2,7 @@ import React from "react";
 
 import Slider from '@material-ui/core/Slider';
 
-import { Button, Button2, Container, Wrapper, ControlWrapper, SpeedWrapper, SpeedContainer, SortWrapper, SearchWrapper, CountContainer} from "./header.style";
+import { Button, Button2, Container, Wrapper, ControlWrapper, SpeedWrapper, SpeedContainer, SortWrapper, SearchWrapper, SpanWrapper, CheckBox, CountContainer} from "./header.style";
 import { Typography } from "@material-ui/core";
 
 var valueBtn = false;
@@ -13,6 +13,7 @@ var valueMC = 0;
 var valueSC = 0;
 var taskType = 0;
 var sorted = 0;
+var historyIdx = 1;
 
 export function valueClear() {
     valueCP = 0;
@@ -37,6 +38,23 @@ export function plusValue(int) {
             break;
         default: 
     }
+}
+
+export const historyUpdate = async (mode, idx, value1, value2) =>{
+    var history;
+    history = document.getElementById("history");
+
+    switch(mode){
+        case 1:{
+            history.textContent = history.textContent + " 제" + historyIdx+" 탐색값:"+idx;
+            break;
+        }
+        case 2:{
+            history.textContent = history.textContent + " 제" + historyIdx+"회 중간값: "+idx+" 탐색범위: "+value1+"~"+value2;
+            break;
+        }
+    }
+    historyIdx++;
 }
 
 export function getSpeed() {
@@ -132,10 +150,18 @@ export default function Header({ sortPause, setArray, updateList, rangeChange, s
     }
 
     function sequential(){
+        historyClear();
         valueBtn = true;
         taskType = 5;
         onTask();
         sequentialSearch();
+    }
+
+    function historyClear(){
+        var history;
+        history = document.getElementById("history");
+        history.innerHTML = "";
+        historyIdx = 1;
     }
 
     function binary(){
@@ -143,6 +169,7 @@ export default function Header({ sortPause, setArray, updateList, rangeChange, s
             alert("정렬된 배열에서 탐색을 진행할 수 있도록 원소 변경 후, 최소 한 번의 정렬을 진행해주세요.");
         }
         else{
+            historyClear();
             valueBtn = true;
             taskType = 6;
             onTask();
@@ -194,6 +221,13 @@ export default function Header({ sortPause, setArray, updateList, rangeChange, s
             await sleep(100);
         }
         task.style.color = "white";
+        task.addEventListener('mouseover', function() {
+            this.style.color = "green";
+        });
+        
+        task.addEventListener('mouseout', function() {
+            this.style.color = "white";
+        });
         top.style.backgroundColor = "#77E000";
         control.style.backgroundColor = "#1CD90B";
     }
@@ -250,6 +284,14 @@ export default function Header({ sortPause, setArray, updateList, rangeChange, s
                     탐색횟수:
                     <Typography>{valueSC}</Typography>
                 </CountContainer>
+                <SpanWrapper>
+                    <span class="hidden">탐색결과<p/>표시</span>
+                </SpanWrapper>
+                <CheckBox>
+                    <input type="checkbox" id="searchHistory"></input>
+                    <label for="test"></label>
+                    <div class="sidebar" id="history"></div>
+                </CheckBox>
             </ControlWrapper>
         </Container>
     );
