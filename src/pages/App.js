@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 
-import Header, { buttonOn, getSpeed, valueClear, plusValue } from "../component/Header";
+import Header, { buttonOn, getSpeed, valueClear, plusValue, historyUpdate } from "../component/Header";
 import Main from './Main';
 import Footer from './Footer';
 
@@ -566,12 +566,13 @@ function App() {
     setArr([...arr]);
     
     var searchV = isThere();
-    console.log("Test: "+searchV);
     var findIdx = 0;
     if(searchV == 0){ //do nothing
     }
     else if (searchV==-1) {
       alert("입력한 원소값이 배열 내에 없는 것 같습니다.");
+      barClear();
+      buttonOn();
     }
     else {
       const inputArr = arr;
@@ -582,6 +583,7 @@ function App() {
           setFinished(inputArr[i-1]);
         }
         setNowIdx(inputArr[i]);
+        historyUpdate(1, inputArr[i], 0,0);
         plusValue(4);
         setArr([...arr]);
         await sleep(500/taskSpeed);
@@ -619,6 +621,8 @@ function App() {
     }
     else if (searchV==-1) {
       alert("입력한 원소값이 배열 내에 없는 것 같습니다.");
+      barClear();
+      buttonOn();
     }
     else {
       var inputArr = arr;
@@ -660,7 +664,6 @@ function App() {
         addPurpleBarHistory([searchV]);
         addOnTaskHistory(inputArr);
 
-        console.log("left: "+leftIdx+", right: "+rightIdx+", midIdx: "+midIdx);
         if(inputArr[midIdx]==searchV){
           findIdx = midIdx;
 
@@ -668,14 +671,13 @@ function App() {
           addRedBarHistory([inputArr[midIdx]]);
           addPurpleBarHistory([0]);
           addOnTaskHistory([inputArr[midIdx]]);
-          console.log("testing3");
           break;
         }
         else if(inputArr[midIdx]>searchV){//키가 중간값보다 작음
           rightIdx = midIdx-1;
           midIdx = Math.floor((leftIdx+rightIdx)/2);
           const tmpArr = [];
-          for(let i =leftIdx;i<rightIdx;i++){
+          for(let i =leftIdx;i<rightIdx+1;i++){
             tmpArr.push(inputArr[i]);
           }
 
@@ -683,14 +685,13 @@ function App() {
           addRedBarHistory([inputArr[midIdx]]);
           addPurpleBarHistory([searchV]);
           addOnTaskHistory(tmpArr);
-          console.log("testing1");
         }
         else{//키가 중간값보다 큼
           leftIdx = midIdx+1;
           midIdx = Math.floor((leftIdx+rightIdx)/2);
 
           const tmpArr = [];
-          for(let i =leftIdx;i<rightIdx;i++){
+          for(let i =leftIdx;i<rightIdx+1;i++){
             tmpArr.push(inputArr[i]);
           }
 
@@ -698,7 +699,6 @@ function App() {
           addRedBarHistory([inputArr[midIdx]]);
           addPurpleBarHistory([searchV]);
           addOnTaskHistory(tmpArr);
-          console.log("testing2");
         }
       }
 
@@ -710,7 +710,6 @@ function App() {
     setArr([...arr]);
     for (let i = 0; i < onTaskHistory.length; i++) {
       barGrayClear();
-      console.log(onTaskHistory[i]+" "+purpleBarHistory[i]+" "+redBarHistory[i]);
       if (searchCountHistory[i] === true)
         plusValue(4);
 
@@ -726,12 +725,20 @@ function App() {
           setCompIdx(redBarHistory[i]);
       }
       setArr([...arr]);
-      if(i<=4)
+      
+      if(i<4)
         await sleep(500);
+      else if(i==4){
+        historyUpdate(2, redBarHistory[i], onTaskHistory[i][0], onTaskHistory[i][onTaskHistory[i].length-1]);
+        await sleep(500);
+      }
       else if(i%2==1)
         await sleep(500 / taskSpeed);
-      else
+      else{
+        if(i<onTaskHistory.length-1)
+          historyUpdate(2, redBarHistory[i], onTaskHistory[i][0], onTaskHistory[i][onTaskHistory[i].length-1]);
         await sleep(750 / taskSpeed);
+      }
     }
     setCompIdx(searchV);
     await sleep(500);
