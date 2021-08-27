@@ -46,7 +46,7 @@ export const historyUpdate = async (mode, idx, value1, value2) =>{
 
     switch(mode){
         case 1:{
-            history.textContent = history.textContent + " 제" + historyIdx+" 탐색값:"+idx;
+            history.textContent = history.textContent + " 제-" + historyIdx+"-탐색값:"+idx;
             break;
         }
         case 2:{
