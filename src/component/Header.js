@@ -46,11 +46,11 @@ export const historyUpdate = async (mode, idx, value1, value2) =>{
 
     switch(mode){
         case 1:{
-            history.textContent = history.textContent + historyIdx+"-탐색값:"+idx;
+            history.textContent = history.textContent + historyIdx+"-탐색값:"+idx+" ";
             break;
         }
         case 2:{
-            history.textContent = history.textContent + historyIdx+"-중간값: "+idx+" 탐색범위: "+value1+"~"+value2;
+            history.textContent = history.textContent + historyIdx+"-중간값: "+idx+" 탐색범위: "+value1+"~"+value2+" ";
             break;
         }
     }
