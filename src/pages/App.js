@@ -529,7 +529,14 @@ function App() {
     }
   }
 
-  function isThere(){
+  function sortPause() {
+    alert("정렬이 일시정지 되었습니다. 계속 진행하시려면 확인을 누르세요.");
+  }
+
+  const sequentialSearch = async ()  => {
+    valueClear();
+    setArr([...arr]);
+    
     var speed = getSpeed();
     if (speed === 1) {
       if (arr.length <= 8) {
@@ -547,37 +554,12 @@ function App() {
     if(input ==null){//입력값 x
       barClear();
       buttonOn();
-      return 0;
+      return;
     }else{
-      for(var i = 0; i<arr.length;i++){
-        if(input ==arr[i])
-          return input;
-      }
-    }
-    return -1;
-  }
-
-  function sortPause() {
-    alert("정렬이 일시정지 되었습니다. 계속 진행하시려면 확인을 누르세요.");
-  }
-
-  const sequentialSearch = async ()  => {
-    valueClear();
-    setArr([...arr]);
-    
-    var searchV = isThere();
-    var findIdx = 0;
-    if(searchV == 0){ //do nothing
-    }
-    else if (searchV==-1) {
-      alert("입력한 원소값이 배열 내에 없는 것 같습니다.");
-      barClear();
-      buttonOn();
-    }
-    else {
       const inputArr = arr;
       let len = inputArr.length;
-      
+      let findIdx = -1
+
       for(var i = 0; i<len;i++){
         if(i!=0){
           setFinished(inputArr[i-1]);
@@ -587,55 +569,71 @@ function App() {
         plusValue(4);
         setArr([...arr]);
         await sleep(500/taskSpeed);
-        if(searchV==inputArr[i]){
+        if(input==inputArr[i]){
           findIdx=i;
           break;
         }
       }
-      await sleep(500);
-      setCompIdx(inputArr[findIdx]);
-      await sleep(500);
-      setFreeIdx(inputArr[findIdx]);
-      await sleep(500);
-      setCompIdx(inputArr[findIdx]);
-      await sleep(500);
-      setFreeIdx(inputArr[findIdx]);
-      await sleep(500);
-      setCompIdx(inputArr[findIdx]);
-      await sleep(500);
+      if(findIdx>=0){
+        await sleep(500);
+        setCompIdx(inputArr[findIdx]);
+        await sleep(500);
+        setFreeIdx(inputArr[findIdx]);
+        await sleep(500);
+        setCompIdx(inputArr[findIdx]);
+        await sleep(500);
+        setFreeIdx(inputArr[findIdx]);
+        await sleep(500);
+        setCompIdx(inputArr[findIdx]);
+        await sleep(500);
 
-      barClear();
-      buttonOn();
-      alert("탐색을 완료하였습니다. "+searchV+"는 배열 내에서 "+(findIdx+1)+"번째에 존재합니다.");
+        barClear();
+        buttonOn();
+        alert("탐색을 완료하였습니다. "+input+"는 배열 내에서 "+(findIdx+1)+"번째에 존재합니다.");
+      }else{
+        barClear();
+        buttonOn();
+        alert("배열의 탐색을 마쳤지만, "+input+"는 배열 내에서 존재하지 않습니다.");
+      }
     }
   }
 
-  const  binarySearch = async () => {
+  const binarySearch = async () => {
     valueClear();
     historyClear();
     setArr([...arr]);
 
-    var searchV = isThere();
-    var findIdx = 0;
-    if(searchV == 0){ //do nothing
+    var speed = getSpeed();
+    if (speed === 1) {
+      if (arr.length <= 8) {
+        taskSpeed = speed / 8;
+      } else {
+        taskSpeed = speed / 4;
+      }
+    } else if (speed === 5) {
+      taskSpeed = speed * 2 * (arr.length / 5);
+    } else {
+      taskSpeed = speed * (arr.length / 5);
     }
-    else if (searchV==-1) {
-      alert("입력한 원소값이 배열 내에 없는 것 같습니다.");
+
+    var input = prompt("탐색하고자 하는 원소값을 입력하세요");
+    if(input ==null){//입력값 x
       barClear();
       buttonOn();
-    }
-    else {
+      return;
+    }else{
       var inputArr = arr;
       let len = inputArr.length; //n
+      let findIdx = -1;
 
       let leftIdx = 0;
-      let rightIdx =inputArr.length-1;
+      let rightIdx = inputArr.length-1;
 
       let midIdx = Math.floor((leftIdx+rightIdx)/2);
 
       addSearchCountHistory(false); //초기 탐색값과 중간값을
       addRedBarHistory([inputArr[midIdx]]);
-      addPurpleBarHistory([searchV]);
+      addPurpleBarHistory([inputArr[leftIdx],inputArr[rightIdx]]);
       addOnTaskHistory(inputArr);
 
       addSearchCountHistory(false);
@@ -645,7 +643,7 @@ function App() {
 
       addSearchCountHistory(false);
       addRedBarHistory([inputArr[midIdx]]);
-      addPurpleBarHistory([searchV]);
+      addPurpleBarHistory([inputArr[leftIdx],inputArr[rightIdx]]);
       addOnTaskHistory(inputArr);
 
       addSearchCountHistory(false);
@@ -655,16 +653,16 @@ function App() {
 
       addSearchCountHistory(true);
       addRedBarHistory([inputArr[midIdx]]);
-      addPurpleBarHistory([searchV]);
+      addPurpleBarHistory([inputArr[leftIdx],inputArr[rightIdx]]);
       addOnTaskHistory(inputArr); // 표시하기 위한 코드
       
       while(rightIdx>=leftIdx){
         addSearchCountHistory(false);
         addRedBarHistory([inputArr[midIdx]]);
-        addPurpleBarHistory([searchV]);
+        addPurpleBarHistory([inputArr[leftIdx],inputArr[rightIdx]]);
         addOnTaskHistory(inputArr);
 
-        if(inputArr[midIdx]==searchV){
+        if(inputArr[midIdx]==input){
           findIdx = midIdx;
 
           addSearchCountHistory(false);
@@ -673,9 +671,13 @@ function App() {
           addOnTaskHistory([inputArr[midIdx]]);
           break;
         }
-        else if(inputArr[midIdx]>searchV){//키가 중간값보다 작음
+        else if(leftIdx == midIdx && rightIdx == midIdx)
+          break;
+        else if(inputArr[midIdx]>input){//키가 중간값보다 작음
           rightIdx = midIdx-1;
+
           midIdx = Math.floor((leftIdx+rightIdx)/2);
+          
           const tmpArr = [];
           for(let i =leftIdx;i<rightIdx+1;i++){
             tmpArr.push(inputArr[i]);
@@ -683,11 +685,15 @@ function App() {
 
           addSearchCountHistory(true);
           addRedBarHistory([inputArr[midIdx]]);
-          addPurpleBarHistory([searchV]);
+          addPurpleBarHistory([inputArr[leftIdx],inputArr[rightIdx]]);
           addOnTaskHistory(tmpArr);
         }
         else{//키가 중간값보다 큼
-          leftIdx = midIdx+1;
+          if(rightIdx==midIdx+1)
+            leftIdx++;
+          else
+            leftIdx = midIdx+1;
+
           midIdx = Math.floor((leftIdx+rightIdx)/2);
 
           const tmpArr = [];
@@ -697,16 +703,15 @@ function App() {
 
           addSearchCountHistory(true);
           addRedBarHistory([inputArr[midIdx]]);
-          addPurpleBarHistory([searchV]);
+          addPurpleBarHistory([inputArr[leftIdx],inputArr[rightIdx]]);
           addOnTaskHistory(tmpArr);
         }
       }
-
-      binaryTimeLine(searchV, findIdx);
+      binaryTimeLine(input, findIdx);
     }
   }
 
-  const binaryTimeLine = async (searchV, findIdx) =>{
+  const binaryTimeLine = async (input, findIdx) =>{
     setArr([...arr]);
     for (let i = 0; i < onTaskHistory.length; i++) {
       barGrayClear();
@@ -719,10 +724,12 @@ function App() {
         }
       }
       if(purpleBarHistory[i] != 0){
-          setNowIdx(purpleBarHistory[i]);
+          for(let t = 0;t<purpleBarHistory[i].length;t++){
+            setNowIdx(purpleBarHistory[i][t]);
+          }
       }
       if(redBarHistory[i] != 0){
-          setCompIdx(redBarHistory[i]);
+        setCompIdx(redBarHistory[i]);
       }
       setArr([...arr]);
       
@@ -740,20 +747,26 @@ function App() {
         await sleep(750 / taskSpeed);
       }
     }
-    setCompIdx(searchV);
-    await sleep(500);
-    setFreeIdx(searchV);
-    await sleep(500);
-    setCompIdx(searchV);
-    await sleep(500);
-    setFreeIdx(searchV);
-    await sleep(500);
-    setCompIdx(searchV);
-    await sleep(500);
-
-    barClear();
-    buttonOn();
-    alert("탐색을 완료하였습니다. "+searchV+"는 배열 내에서 "+(findIdx+1)+"번째에 존재합니다.");
+    if(findIdx>=0){
+      setCompIdx(input);
+      await sleep(500);
+      setFreeIdx(input);
+      await sleep(500);
+      setCompIdx(input);
+      await sleep(500);
+      setFreeIdx(input);
+      await sleep(500);
+      setCompIdx(input);
+      await sleep(500);
+  
+      barClear();
+      buttonOn();
+      alert("탐색을 완료하였습니다. "+input+"는 배열 내에서 "+(findIdx+1)+"번째에 존재합니다.");
+    }else{
+      barClear();
+      buttonOn();
+      alert("배열의 탐색을 마쳤지만, "+input+"는 배열 내에서 존재하지 않습니다.");
+    }
   }
 
   return (
