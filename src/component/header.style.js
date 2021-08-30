@@ -6,7 +6,6 @@ export const Button = styled.p`
     color: #fff;
     cursor: pointer;
     disabled: false;
-
     &:hover{
         color: green;
     }
@@ -18,7 +17,6 @@ export const Button2 = styled.p`
     color: #fff;
     cursor: pointer;
     disabled: false;
-
     &:hover{
         color: green;
     }
@@ -102,14 +100,13 @@ export const SpanWrapper = styled.div`
 export const CheckBox = styled.div`
     margin-top:12px;
     zoom:1.5;
-
     div[class="sidebar"]{
-        width:90px;
+        width:100px;
         height: 60%;
         background:#D6D4D2;
         position:fixed;
         top:150px;
-        right:-90px;
+        right:-100px;
         z-index:1;
         transition: all .35s;
         font-size: 11px;
@@ -117,6 +114,11 @@ export const CheckBox = styled.div`
         overflow:auto;
         line-height: 140%;
     }
+
+    .sidebar::-webkit-scrollbar {
+        display: none;
+    }
+
     input[id="searchHistory"]:checked+label+div{
         right:0;
         Container-width:78%;
