@@ -25,8 +25,6 @@ function App() {
   var onTaskTotalIdx = 0;
   var countHistory = [];
   var countTotalIdx = 0;
-  var searchHistory = [];
-  var searchTotalIdx = 0;
   var searchCountHistory = [];
   var searchCountIdx = 0;
 
@@ -34,7 +32,7 @@ function App() {
     updateList();
   }, [size]);
 
-  const sleep = (milliseconds) => { //딜레이 메소드
+  const sleep = (milliseconds) => { //딜레이 메소드 (함수에서 사용 시 const 함수명 = async () =>{} 형태로 사용)
     return new Promise((resolve) => setTimeout(resolve, milliseconds));
   };
 
@@ -119,55 +117,55 @@ function App() {
 
   }
 
-  const selectClicked = () => {
+  const selectClicked = () => { //작업에 대해 onTask 작업 시 참조할 sortType 변수 값 지정 (선택정렬)
     setSort(1);
     valueClear();
   }
 
-  const bubbleClicked = () => {
+  const bubbleClicked = () => { //버블정렬
     setSort(2);
     valueClear();
   }
 
-  const insertClicked = () => {
+  const insertClicked = () => { //삽입정렬
     setSort(3);
     valueClear();
   }
 
-  const mergeClicked = () => {
+  const mergeClicked = () => { //병합정렬
     setSort(4);
     valueClear();
   }
 
-  const selectSort = async () => {
+  const selectSort = async () => { //선택정렬 코드
     const inputArr = arr;
     let len = inputArr.length;
     let least;
 
-    for (let i = 0; i < len; i++) {
+    for (let i = 0; i < len; i++) { //배열 전체를 순회
       least = i;
 
       if (i != 0) {
-        setFinished(inputArr[i - 1]);
+        setFinished(inputArr[i - 1]); //다음 반복 진행 시 이전 인덱스의 그래프 색 gray 지정
       }
 
       setCompIdx(inputArr[least]);
       await sleep(375 / taskSpeed);
 
-      for (let j = i + 1; j < len; j++) {
+      for (let j = i + 1; j < len; j++) { //한 사이클마다 최소값을 확인
         setNowIdx(inputArr[j]);
-        if (inputArr[j] < inputArr[least]) {
-          setFreeIdx(inputArr[least]);
-          setNowIdx(inputArr[j]);
-          least = j;
+        if (inputArr[j] < inputArr[least]) { //최소값보다 더 작은 값이라면
+          setFreeIdx(inputArr[least]); //빨간색인 이전의 least번째 막대 그래프 색상 초기화
+          setNowIdx(inputArr[j]); //j번째 막대 그래프 색상 변경(빨강)
+          least = j; //최소값 또한 j로 변경
         }
-        plusValue(1);
-        setArr([...arr]);
-        setCompIdx(inputArr[least]);
-        await sleep(375 / taskSpeed);
-        setFreeIdx(inputArr[j]);
+        plusValue(1); 
+        setArr([...arr]); //그래프를 최신 정보로 갱신
+        setCompIdx(inputArr[least]); //현재 확인 중인 막대 그래프 색상 변경(보라)
+        await sleep(375 / taskSpeed); //딜레이
+        setFreeIdx(inputArr[j]); //j번째 막대 그래프 색상 초기화
       }
-      if (i !== least) {//swap
+      if (i !== least) {//i번째 인덱스와 찾은 최소값을 swap
         setNowIdx(inputArr[i]);
         setCompIdx(inputArr[least]);
         await sleep(375 / taskSpeed);
@@ -191,19 +189,19 @@ function App() {
     alert("정렬이 완료되었습니다.");
   }
 
-  const bubbleSort = async () => {
+  const bubbleSort = async () => { //버블정렬 코드
     const inputArr = arr;
     let len = inputArr.length;
     var sorted = len;
     var swapped = false;
-    for (let i = 0; i < len; i++) {
+    for (let i = 0; i < len; i++) { //배열 전체 반복
       swapped = false;
-      for (let j = 0; j < sorted - 1; j++) {
+      for (let j = 0; j < sorted - 1; j++) { //정렬이 진행될 때마다 끝에서부터 작업범위 감소
         plusValue(1);
         setArr([...arr]);
         setNowIdx(inputArr[j]);
         await sleep(375 / taskSpeed);
-        if (inputArr[j] > inputArr[j + 1]) {//swap
+        if (inputArr[j] > inputArr[j + 1]) {//j번째 인덱스가 j+1번째보다 더 크다면 j+1번째와 swap
           setCompIdx(inputArr[j + 1]);
           await sleep(375 / taskSpeed);
           setArr([...arr]);
@@ -243,19 +241,19 @@ function App() {
     alert("정렬이 완료되었습니다.");
   }
 
-  const insertionSort = async () => {
+  const insertionSort = async () => { //삽입정렬 코드
     setArr([...arr]);
     const inputArr = arr;
     let len = inputArr.length;
     let compIdx = 0;
 
-    for (let i = 0; i < len; i++) {
+    for (let i = 0; i < len; i++) { //배열 전체 반복
       setNowIdx(inputArr[i]);
-      for (let j = i; j > 0; j--) {
+      for (let j = i; j > 0; j--) { //i부터 0번째까지 반복하며 삽입할 원소를 적절한 위치까지 정렬
         plusValue(1);
         setArr([...arr]);
         await sleep(188 / taskSpeed);
-        if (inputArr[j] < inputArr[j - 1]) {//swap
+        if (inputArr[j] < inputArr[j - 1]) {//j번째 인덱스가 더 j-1번째보다 작다면 j-1번째와 swap
           compIdx = j;
           setArr([...arr]);
           let tmp = inputArr[j];
@@ -281,7 +279,7 @@ function App() {
     alert("정렬이 완료되었습니다.");
   }
 
-  const historyClear = () =>{
+  const historyClear = () =>{ //작업 진행 전 관련 변수 초기화
     mergeHistory = [];
     mergeTotalIdx = 0;
     countHistory = [];
@@ -292,20 +290,18 @@ function App() {
     purpleBarTotalIdx = 0;
     onTaskHistory = [];
     onTaskTotalIdx = 0;
-    searchHistory = [];
-    searchTotalIdx = 0;
     searchCountHistory = [];
     searchCountIdx = 0;
   }
 
-  const mergeSort = (receivedArr) => {
+  const mergeSort = (receivedArr) => { //병합정렬 코드 (병합정렬은 실시간으로 그래프 색상을 변경하지 않음)
     historyClear();
     mergeRecursion(receivedArr);
     mergeTimeLine();
   }
 
-  const mergeRecursion = (receivedArr) => {
-    setArr([...arr]);
+  const mergeRecursion = (receivedArr) => { //병합정렬 재귀 함수 (그 이유로는 재귀호출로 인한 제약사항이 존재함)
+    setArr([...arr]); // 그 대신 작업 진행 간 그래프 색상 변경 내역을 배열들에 저장 후 정렬 종료 시 순차적으로 표현
     let recurArr = receivedArr;
     if (recurArr.length <= 1) {
 
@@ -396,7 +392,7 @@ function App() {
     return (compArr);
   }
 
-  const swapInMerge = (leastIdx, swapIdx) => {
+  const swapInMerge = (leastIdx, swapIdx) => { //병합 시 병합할 배열의 특정 범위에 원소들을 정렬
     let realIdx1 = 0; //최소값 인덱스
     let realIdx2 = 0; //바꿀 인덱스
     for (let k = 0; k < arr.length; k++) {
@@ -410,7 +406,7 @@ function App() {
     arr[realIdx1] = tmp;
   }
 
-  const addMergeHistory = (receivingArr) => {
+  const addMergeHistory = (receivingArr) => { //병합정렬이 진행될 때 배열의 기록
     mergeHistory.push([]);
     for (var j = 0; j < receivingArr.length; j++) {
       mergeHistory[mergeTotalIdx].push(receivingArr[j]);
@@ -418,7 +414,7 @@ function App() {
     mergeTotalIdx++;
   }
 
-  const addRedBarHistory = (arr) => {
+  const addRedBarHistory = (arr) => { //그래프 색상을 빨강으로 바꾸는 기록
     redBarHistory.push([]);
     for (var r = 0; r < arr.length; r++) {
       redBarHistory[redBarTotalIdx].push(arr[r]);
@@ -426,7 +422,7 @@ function App() {
     redBarTotalIdx++;
   }
 
-  const addPurpleBarHistory = (arr) => {
+  const addPurpleBarHistory = (arr) => { //그래프 색상을 보라로 바꾸는 기록
     purpleBarHistory.push([]);
     for (var p = 0; p < arr.length; p++) {
       purpleBarHistory[purpleBarTotalIdx].push(arr[p]);
@@ -434,7 +430,7 @@ function App() {
     purpleBarTotalIdx++;
   }
 
-  const addOnTaskHistory = (arr) => {
+  const addOnTaskHistory = (arr) => { //진행중인 배열의 특정 범위를 표시(해당 범위 외에는 회색, 해당 범위는 색상 초기화)
     onTaskHistory.push([]);
     for (var s = 0; s < arr.length; s++) {
       onTaskHistory[onTaskTotalIdx].push(arr[s]);
@@ -442,7 +438,7 @@ function App() {
     onTaskTotalIdx++;
   }
 
-  const addCountHistory = (compNswap) => {
+  const addCountHistory = (compNswap) => { //병합 정렬 시 병합 횟수 증가 기록
     countHistory.push([]);
     for (var c = 0; c < compNswap.length; c++) {
       countHistory[countTotalIdx].push(compNswap[c]);
@@ -450,12 +446,12 @@ function App() {
     countTotalIdx++;
   }
 
-  const addSearchCountHistory = (search) => {
+  const addSearchCountHistory = (search) => { //탐색 작업 시 탐색 횟수 증가 기록
     searchCountHistory.push(search);
     searchCountIdx++;
   }
 
-  const mergeTimeLine = async () => {
+  const mergeTimeLine = async () => { //병합정렬 간 추가된 모든 기록을 순차적으로 표현
     setArr([...arr]);
     for (let i = 0; i < mergeHistory.length; i++) {
       barGrayClear();
@@ -490,7 +486,7 @@ function App() {
     alert("정렬이 완료되었습니다.");
   }
 
-  const sortStart = async () => {
+  const sortStart = async () => { //Header.js에서 정렬 시작 버튼 클릭 시 연결된 함수
     await sleep(100);
     valueClear();
 
@@ -529,11 +525,11 @@ function App() {
     }
   }
 
-  function sortPause() {
+  function sortPause() { //Header.js에서 일시정지 버튼 클릭 시 연결된 함수
     alert("정렬이 일시정지 되었습니다. 계속 진행하시려면 확인을 누르세요.");
   }
 
-  const sequentialSearch = async ()  => {
+  const sequentialSearch = async ()  => {//순차 탐색 코드
     valueClear();
     setArr([...arr]);
     
@@ -550,7 +546,7 @@ function App() {
       taskSpeed = speed * (arr.length / 5);
     }
 
-    var input = prompt("탐색하고자 하는 원소값을 입력하세요");
+    var input = prompt("탐색하고자 하는 원소값을 입력하세요"); 
     if(input ==null){//입력값 x
       barClear();
       buttonOn();
@@ -560,7 +556,7 @@ function App() {
       let len = inputArr.length;
       let findIdx = -1
 
-      for(var i = 0; i<len;i++){
+      for(var i = 0; i<len;i++){//배열 길이만큼 반복
         if(i!=0){
           setFinished(inputArr[i-1]);
         }
@@ -598,7 +594,7 @@ function App() {
     }
   }
 
-  const binarySearch = async () => {
+  const binarySearch = async () => {//이진 탐색 코드(병합정렬과 유사하게 작업 내역을 기록해둔 뒤 표현함)
     valueClear();
     historyClear();
     setArr([...arr]);
@@ -711,7 +707,7 @@ function App() {
     }
   }
 
-  const binaryTimeLine = async (input, findIdx) =>{
+  const binaryTimeLine = async (input, findIdx) =>{ //이진탐색 간 추가된 모든 기록을 순차적으로 표현
     setArr([...arr]);
     for (let i = 0; i < onTaskHistory.length; i++) {
       barGrayClear();
