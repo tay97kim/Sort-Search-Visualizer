@@ -15,32 +15,32 @@ var taskType = 0;
 var sorted = 0;
 var historyIdx = 1;
 
-export function valueClear() {
+export function valueClear() { //새 작업 진행 시 비교/교환/병합/탐색 횟수들을 모두 초기화
     valueCP = 0;
     valueSW = 0;
     valueMC = 0;
     valueSC = 0;
 }
 
-export function plusValue(int) {
+export function plusValue(int) { //작업 진행에 따른 비교/교환/병합/탐색 횟수 값 증가
     switch (int) {
         case 1: 
-            valueCP++;
+            valueCP++; //비교 횟수(Comparison)
             break;
         case 2: 
-            valueSW++;
+            valueSW++; //교환 횟수(Swap)
             break;
         case 3: 
-            valueMC++;
+            valueMC++; // 병합 횟수(Merge)
             break;
         case 4: 
-            valueSC++;
+            valueSC++; // 탐색 횟수(Search)
             break;
         default: 
     }
 }
 
-export const historyUpdate = async (mode, idx, value1, value2) =>{
+export const historyUpdate = async (mode, idx, value1, value2) =>{ //탐색이 진행되는 동안의 기록을 text로 추가
     var history;
     history = document.getElementById("history");
 
@@ -57,11 +57,11 @@ export const historyUpdate = async (mode, idx, value1, value2) =>{
     historyIdx++;
 }
 
-export function getSpeed() {
+export function getSpeed() { //작업속도 반환
     return valueSpeed;
 }
 
-export function buttonOn() {
+export function buttonOn() { //작업 종료 시 버튼 활성화
     valueBtn = false;
 }
 
@@ -73,17 +73,17 @@ export default function Header({ sortPause, setArray, updateList, rangeChange, s
         return new Promise((resolve) => setTimeout(resolve, milliseconds));
     };
 
-    const SliderChange = (event, newValue) => {
+    const SliderChange = (event, newValue) => { //슬라이더의 속도값을 바꿀 때 마다 실행되는 함수
         setValueS(newValue);
         setSpeed(valueS);
         document.getElementById("speedV").innerText = newValue;
     };
 
-    function setSpeed(inputSpeed) {
+    function setSpeed(inputSpeed) { //valueSpeed를 갱신
         valueSpeed = inputSpeed;
     }
 
-    function buttonOff() {
+    function buttonOff() { //정렬 시작 버튼 클릭 시 실행
         if (valueBtn === false) {
             if (taskType === 0) {
                 alert("정렬의 종류를 먼저 선택한 뒤 시작해주세요");
@@ -97,7 +97,7 @@ export default function Header({ sortPause, setArray, updateList, rangeChange, s
         }
     }
 
-    function setArrayBtn() {
+    function setArrayBtn() { //직접 배열 생성 버튼 클릭 시 실행
         if (valueBtn === false) {
             sorted = 0;
             valueClear();
@@ -105,7 +105,7 @@ export default function Header({ sortPause, setArray, updateList, rangeChange, s
         }
     }
 
-    function updateListBtn() {
+    function updateListBtn() { //새 배열 생성 버튼 클릭 시 실행
         if (valueBtn === false) {
             sorted = 0;
             valueClear();
@@ -113,7 +113,7 @@ export default function Header({ sortPause, setArray, updateList, rangeChange, s
         }
     }
 
-    function rangeChangeBtn() {
+    function rangeChangeBtn() { //원소개수설정 버튼 클릭 시 실행
         if (valueBtn === false) {
             sorted = 0;
             valueClear();
@@ -121,35 +121,35 @@ export default function Header({ sortPause, setArray, updateList, rangeChange, s
         }
     }
 
-    function select() {
+    function select() { //선택정렬 버튼 클릭 시 실행
         if (valueBtn === false) {
             taskType = 1;
-            selectClicked();
+            selectClicked(); //App.js 함수
         }
     }
 
-    function bubble() {
+    function bubble() { //버블정렬 버튼 클릭 시 실행
         if (valueBtn === false) {
             taskType = 2;
             bubbleClicked();
         }
     }
 
-    function insert() {
+    function insert() { //삽입정렬 버튼 클릭 시 실행
         if (valueBtn === false) {
             taskType = 3;
             insertClicked();
         }
     }
 
-    function merge() {
+    function merge() { //병합정렬 버튼 클릭 시 실행
         if (valueBtn === false) {
             taskType = 4;
             mergeClicked();
         }
     }
 
-    function sequential(){
+    function sequential(){ //순차탐색 버튼 클릭 시 실행
         historyClear();
         valueBtn = true;
         taskType = 5;
@@ -157,14 +157,14 @@ export default function Header({ sortPause, setArray, updateList, rangeChange, s
         sequentialSearch();
     }
 
-    function historyClear(){
+    function historyClear(){ //탐색 작업 시 탐색기록을 초기화
         var history;
         history = document.getElementById("history");
         history.innerHTML = "";
         historyIdx = 1;
     }
 
-    function binary(){
+    function binary(){ //이진탐색 버튼 클릭 시 실행
         if(sorted == 0){
             alert("정렬된 배열에서 탐색을 진행할 수 있도록 원소 변경 후, 최소 한 번의 정렬을 진행해주세요.");
         }
@@ -177,13 +177,13 @@ export default function Header({ sortPause, setArray, updateList, rangeChange, s
         }
     }
     
-    function pause() {
+    function pause() { //일시정지 버튼 클릭 시 실행
         if (valueBtn === true) {
             sortPause();
         }
     }
 
-    const onTask = async () => {
+    const onTask = async () => { //현재 진행중인 작업은 검정색으로 표시
         var top = document.getElementById("top");
         var control = document.getElementById("control");
         var task;
