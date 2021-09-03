@@ -1,12 +1,11 @@
 import React from "react";
 import styled from 'styled-components';
 
-export default function Main({ data, currentIdx, nextIdx }) {
-
+export default function Main({ data }) {
     const width = 500 / data.length;
     var height = 4;
 
-    if (data.length > 29) {
+    if (data.length > 29) { //배열의 크기가 30보다 클 경우 숫자를 표시하지 않음(가독성 저하)
         if (data.length >= 100)
             height = 3;
         return (
@@ -26,14 +25,7 @@ export default function Main({ data, currentIdx, nextIdx }) {
             </Container >
         );
     }
-
 }
-
-const Tmp = styled.div`
-    position: relative;
-    display: flex;
-
-`
 
 const Container = styled.div`
     position: relative;
