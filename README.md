@@ -1,13 +1,13 @@
 # Sort & Search Visualizer
 Sort & Search visualizer using React JS
 
-[2021-07-20] - New Update! Implementing sequential search, binary search in sorted array.
+[2021-07-20] - 정렬된 배열에서 순차탐색과 이진 탐색이 가능해집니다.
 
-[2021-08-06] - New Update! Implementing Search log to help identifying sequential process.
+[2021-08-06] - 탐색 히스토리를 추가하여 순차적인 과정의 확인이 가능해집니다.
 
-[2021-08-30] - New Update! Modified the search logic: The search continues even if you do not have the value you are looking for, and improve search history display.
+[2021-08-30] - 탐색이 현재 배열에 존재하지 않는 원소를 찾을 때에도 탐색이 진행되도록 동작 방식을 변경하였습니다.
 
-Now available on https://sort-n-search-visualizer-duce.vercel.app/
+애플리케이션은 https://sort-n-search-visualizer-duce.vercel.app/의 주소에서 확인 가능합니다.
 ![manual image](https://user-images.githubusercontent.com/55838882/132001903-41421880-29af-427c-96f1-d3ae30f1189a.PNG)
 
 사용 순서] - 1 > 2 > 3 or 4 > 5의 순서로 진행.
