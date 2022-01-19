@@ -7,7 +7,7 @@ Sort & Search visualizer using React JS
 
 [2021-08-30] - 탐색이 현재 배열에 존재하지 않는 원소를 찾을 때에도 탐색이 진행되도록 동작 방식을 변경하였습니다.
 
-애플리케이션은 https://sort-n-search-visualizer-duce.vercel.app/ 의 주소에서 확인 가능합니다.
+애플리케이션은 https://sort-n-search-visualizer-duce.vercel.app/ 에서 확인 가능합니다.
 ![manual image](https://user-images.githubusercontent.com/55838882/132001903-41421880-29af-427c-96f1-d3ae30f1189a.PNG)
 
 사용 순서] - 1 > 2 > 3 or 4 > 5의 순서로 진행.
