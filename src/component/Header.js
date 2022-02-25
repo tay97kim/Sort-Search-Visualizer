@@ -154,6 +154,7 @@ export default function Header({ sortPause, setArray, updateList, rangeChange, s
         valueBtn = true;
         taskType = 5;
         onTask();
+        showHistory();
         sequentialSearch();
     }
 
@@ -173,8 +174,14 @@ export default function Header({ sortPause, setArray, updateList, rangeChange, s
             valueBtn = true;
             taskType = 6;
             onTask();
+            showHistory();
             binarySearch();
         }
+    }
+
+    function showHistory(){
+        if(!document.getElementById("searchHistory").checked)
+            document.getElementById("searchHistory").checked = true;
     }
     
     function pause() { //일시정지 버튼 클릭 시 실행
