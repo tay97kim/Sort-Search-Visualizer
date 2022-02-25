@@ -10,7 +10,10 @@ export default function Main() {
             <FooterContent>
                 <InnerContent>
                     Designed by Prof. Jongwan Kim, produced by TaeSeong Kim
-                    <p />[2021.08] - 모두를 위한 컴퓨팅 사고
+                    <p>[2021.08] - 모두를 위한 컴퓨팅 사고</p>
+                    <a href="https://www.webfreecounter.com/" target="_blank">
+                        <img src="https://www.cutercounter.com/hits.php?id=hxanqxx&nd=6&style=72" border="0" alt="website counter"/>
+                    </a>
                 </InnerContent>
             </FooterContent>
             <FooterContent>
